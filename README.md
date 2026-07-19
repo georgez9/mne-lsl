@@ -1,34 +1,40 @@
 # LSL Recorder
 
-一个面向 EEG、眼动、marker 及其他 Lab Streaming Layer（LSL）数据源的轻量桌面采集工具。
+[English](README.md) | [简体中文](README.zh-CN.md)
 
-## 功能
+A lightweight desktop recording tool for EEG, eye-tracking, markers, and other
+Lab Streaming Layer (LSL) data sources.
 
-- 自动发现可见的 LSL streams，不依赖写死的设备名称。
-- 在 stream 列表中勾选即连接，取消勾选即断开。
-- 一键开始和停止多个已连接 streams，并为每个 stream 分别保存 CSV。
-- 三个独立波形图可分别选择 channel，Y 轴随当前可见数据自动缩放。
-- 保存 session manifest，以及在异常退出后保留尚未确认保存的数据。
-- 提供无需硬件的多 stream 模拟器。
+## Features
 
-## 直接使用 Windows EXE
+- Automatically discovers visible LSL streams without relying on hard-coded device names.
+- Connects to a stream when selected and disconnects when deselected.
+- Starts and stops multiple connected streams together and saves each stream to a separate CSV file.
+- Provides three independent waveform plots, each with selectable channels and automatic Y-axis scaling for visible data.
+- Saves a session manifest and preserves unconfirmed recording data after an unexpected exit.
+- Includes a multi-stream simulator for testing without hardware.
 
-正式版本会发布在 [GitHub Releases](https://github.com/georgez9/mne-lsl/releases)。下载
-`LSLRecorder.exe` 后可直接运行，无需安装 Python。录制文件默认写入：
+## Use the Windows EXE
 
-请先把 EXE 放在用户有写入权限的文件夹（例如 `Downloads\LSLRecorder`）再运行；
-不要直接从只读目录、压缩包预览或网络共享中启动。
+Official builds are published on [GitHub Releases](https://github.com/georgez9/mne-lsl/releases).
+Download `LSLRecorder.exe` and run it directly; Python is not required. Recordings
+are saved to the following directory by default:
+
+Place the EXE in a writable folder, such as `Downloads\LSLRecorder`, before
+running it. Do not launch it directly from a read-only directory, archive
+preview, or network share.
 
 ```text
 Documents\LSL Recorder\Data
 ```
 
-日志写入 `Documents\LSL Recorder\logs`。也可在 GUI 中选择其他输出目录，或通过
-`LSL_RECORDER_DATA_DIR` 环境变量覆盖默认数据目录。
+Logs are written to `Documents\LSL Recorder\logs`. You can select a different
+output directory in the GUI or override the default with the
+`LSL_RECORDER_DATA_DIR` environment variable.
 
-## 从源码运行
+## Run from Source
 
-推荐使用 Conda：
+Conda is recommended:
 
 ```powershell
 conda env create -f environment.yml
@@ -36,22 +42,26 @@ conda activate mne-lsl
 python -m lsl_gui
 ```
 
-也可以执行 `run_lsl_gui.bat`。基本流程为：发现 streams → 勾选连接 → 开始读取 →
-停止读取 → 保存。取消勾选会断开对应 stream。
+You can also run `run_lsl_gui.bat`. The basic workflow is: discover streams →
+select to connect → start reading → stop reading → save. Deselecting a stream
+disconnects it.
 
-## 无硬件测试
+## Test Without Hardware
 
-双击 `run_demo.bat`，它会启动模拟 streams 并打开 GUI。也可以分别运行：
+Double-click `run_demo.bat` to start simulated streams and open the GUI. You can
+also run the components separately:
 
 ```powershell
 python scripts/simulate_lsl_streams.py
 python -m lsl_gui
 ```
 
-GUI 中会出现 `Demo-EEG`、`Demo-Aux` 和 `Demo-Events` 三个可独立连接的逻辑 stream，
-用于测试多流连接、三通道波形选择、录制、保存与断开。
+The GUI will show three independently connectable logical streams:
+`Demo-EEG`, `Demo-Aux`, and `Demo-Events`. Use them to test multi-stream
+connections, three-channel waveform selection, recording, saving, and
+disconnection.
 
-## 测试与构建
+## Testing and Building
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -59,24 +69,26 @@ python -m pip install -r requirements-build.txt
 .\scripts\build_release.ps1 -Python python
 ```
 
-构建产物位于 `dist/`，不会提交到 Git。完整发布步骤见
-[docs/release-guide.md](docs/release-guide.md)。
+Build artifacts are written to `dist/` and are not committed to Git. See the
+[release guide](docs/release-guide.md) for the complete release process.
 
-## 仓库目录
+## Repository Structure
 
 ```text
-.github/workflows/  CI 与 tag 发布流程
-build_tools/        PyInstaller 入口和 spec
-docs/               共享与发布文档
-lsl_gui/            正式应用源码
-scripts/            模拟器和构建脚本
-tests/              无硬件单元测试
+.github/workflows/  CI and tag-based release workflows
+build_tools/        PyInstaller entry point and spec
+docs/               Sharing and release documentation
+lsl_gui/            Application source code
+scripts/            Simulator and build scripts
+tests/              Hardware-independent unit tests
 ```
 
-本地采集数据、`legacy/`、`plan/`、IDE 配置、环境目录和构建产物均被 Git 忽略。具体规则见
-[docs/repository-policy.md](docs/repository-policy.md)。
+Local recording data, `legacy/`, `plan/`, IDE settings, environment directories,
+and build artifacts are ignored by Git. See the
+[repository policy](docs/repository-policy.md) for details.
 
 ## License
 
-本项目使用 [MIT License](LICENSE)。第三方组件继续遵循各自许可证，相关说明见
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+This project is licensed under the [MIT License](LICENSE). Third-party components
+remain subject to their respective licenses; see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for details.
