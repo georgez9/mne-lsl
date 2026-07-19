@@ -1,0 +1,3 @@
+mne-lsl==1.12.0
+matplotlib==3.10.8
+numpy>=2.2,<3

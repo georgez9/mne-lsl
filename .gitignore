@@ -1,0 +1,56 @@
+# Python caches and build output
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.exe
+*.sha256
+
+# Local Python environments
+.venv/
+venv/
+env/
+
+# IDE and editor state
+.idea/
+.vscode/
+*.code-workspace
+*.swp
+*~
+
+# Recorded data and generated output
+/Data/
+/data/
+/outputs/
+/logs/
+/temp/
+/legacy/
+/plan/
+*.pending/
+*.csv.part
+*.csv
+!tests/fixtures/**/*.csv
+*.log
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+settings.json
+credentials.json
+*.pem
+*.key
+*.sqlite
+*.db
+
+# Jupyter and operating-system files
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+desktop.ini
