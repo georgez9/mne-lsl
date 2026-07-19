@@ -16,6 +16,9 @@
 正式版本会发布在 [GitHub Releases](https://github.com/georgez9/mne-lsl/releases)。下载
 `LSLRecorder.exe` 后可直接运行，无需安装 Python。录制文件默认写入：
 
+请先把 EXE 放在用户有写入权限的文件夹（例如 `Downloads\LSLRecorder`）再运行；
+不要直接从只读目录、压缩包预览或网络共享中启动。
+
 ```text
 Documents\LSL Recorder\Data
 ```

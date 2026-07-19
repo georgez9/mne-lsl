@@ -9,6 +9,7 @@ $Executable = Join-Path $ProjectRoot "dist\LSLRecorder.exe"
 $Checksum = "$Executable.sha256"
 $ThirdPartyLicenses = Join-Path $ProjectRoot "dist\THIRD_PARTY_LICENSES.txt"
 $ProjectLicense = Join-Path $ProjectRoot "dist\PROJECT_LICENSE.txt"
+$SmokeReport = Join-Path $ProjectRoot "build\smoke-test.txt"
 
 Push-Location $ProjectRoot
 try {
@@ -28,15 +29,36 @@ try {
     }
 
     $PreviousDataDirectory = $env:LSL_RECORDER_DATA_DIR
+    $PreviousSmokeReport = $env:LSL_RECORDER_SMOKE_REPORT
     try {
         $env:LSL_RECORDER_DATA_DIR = Join-Path $ProjectRoot "build\smoke-data"
-        & $Executable --smoke-test
-        if ($LASTEXITCODE -ne 0) {
-            throw "Packaged application smoke test failed."
+        $env:LSL_RECORDER_SMOKE_REPORT = $SmokeReport
+        if (Test-Path -LiteralPath $SmokeReport) {
+            Remove-Item -LiteralPath $SmokeReport -Force
+        }
+        $Process = Start-Process -FilePath $Executable -ArgumentList "--smoke-test" -PassThru
+        if (-not $Process.WaitForExit(60000)) {
+            $Process.Kill()
+            $Process.WaitForExit()
+            $Progress = if (Test-Path -LiteralPath $SmokeReport) {
+                Get-Content -LiteralPath $SmokeReport -Raw
+            } else {
+                "No smoke-test progress report was created."
+            }
+            throw "Packaged application smoke test timed out after: $Progress"
+        }
+        $Report = if (Test-Path -LiteralPath $SmokeReport) {
+            Get-Content -LiteralPath $SmokeReport -Raw
+        } else {
+            "Smoke test did not create a diagnostic report."
+        }
+        if ($Process.ExitCode -ne 0 -or $Report.Trim() -ne "OK") {
+            throw "Packaged application smoke test failed:`n$Report"
         }
     }
     finally {
         $env:LSL_RECORDER_DATA_DIR = $PreviousDataDirectory
+        $env:LSL_RECORDER_SMOKE_REPORT = $PreviousSmokeReport
     }
 
     & $Python scripts\generate_third_party_licenses.py $ThirdPartyLicenses
